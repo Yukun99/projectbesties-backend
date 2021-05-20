@@ -5,7 +5,7 @@ const cardSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    url: String
+    imgUrl: String
 });
 
 export default mongoose.model('cards', cardSchema);
