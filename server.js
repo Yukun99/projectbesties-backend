@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Cors from 'cors';
-import Cards from './models/Users.js';
+import Users from './models/Users.js';
 
 //App Config
 const app = express();
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 app.post('/tinder/users', (req, res) => {
     const dbCard = req.body;
 
-    Cards.create(dbCard, (err, data) => {
+    Users.create(dbCard, (err, data) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -38,7 +38,7 @@ app.post('/tinder/users', (req, res) => {
 })
 
 app.get('/tinder/users', (req, res) => {
-    Cards.find((err, data) => {
+    Users.find((err, data) => {
         if (err) {
             res.status(500).send(err);
         } else {
