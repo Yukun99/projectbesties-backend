@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Cors from 'cors';
-import Cards from './models/dbCards.js';
+import Cards from './models/Cards.js';
 
 //App Config
 const app = express();
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
     res.status(200).send("Hello Alyssa!");
 });
 
-app.post('/tinder/cards', (req, res) => {
+app.post('/tinder/users', (req, res) => {
     const dbCard = req.body;
 
     Cards.create(dbCard, (err, data) => {
@@ -37,7 +37,7 @@ app.post('/tinder/cards', (req, res) => {
     });
 })
 
-app.get('/tinder/cards', (req, res) => {
+app.get('/tinder/users', (req, res) => {
     Cards.find((err, data) => {
         if (err) {
             res.status(500).send(err);
