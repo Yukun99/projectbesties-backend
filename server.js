@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Cors from 'cors';
-import Cards from './models/Cards.js';
+import Cards from './models/Users.js';
 
 //App Config
 const app = express();
