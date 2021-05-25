@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.post('/tinder/users', async (req, res) => {
   const user = req.body;
   try {
-    const newUser = await user.save();
+    const newUser = await Users.create(user);
     res.status(201).json({newUser});
   } catch (error) {
     res.status(400).json({message: error.message});
@@ -40,7 +40,7 @@ app.post('/tinder/users', async (req, res) => {
 app.post('/tinder/chats', async (req, res) => {
   const chat = req.body;
   try {
-    const newChat = await chat.save();
+    const newChat = await Chats.create(chat);
     res.status(201).json({newChat});
   } catch (error) {
     res.status(400).json({message: error.message});
