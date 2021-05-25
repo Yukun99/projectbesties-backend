@@ -32,17 +32,10 @@ app.post('/tinder/users', async (req, res) => {
     try {
         await User.create(user);
         res.status(201).send(user);
+        console.log("test");
     } catch (err) {
         res.status(400).json({message: err.message});
     }
-
-    // Users.create(dbCard, (err, data) => {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         res.status(201).send(data);
-    //     }
-    // });
 })
 
 app.get('/tinder/users', async (req, res) => {
