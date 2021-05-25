@@ -5,6 +5,14 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     age: {
         type: Number,
         required: true
@@ -19,6 +27,18 @@ const userSchema = mongoose.Schema({
         required: true
     },
     projects: {
+        type: Array
+    },
+    posts: {
+        type: Array
+    },
+    testResults: {
+        type: Array
+    },
+    swiped: {
+        type: Array
+    },
+    matches: {
         type: Array
     }
 });
