@@ -33,16 +33,18 @@ app.post('/tinder/users', async (req, res) => {
     res.status(201).json({newUser});
   } catch (error) {
     res.status(400).json({message: error.message});
+    throw error;
   }
 });
 
 app.post('/tinder/chats', async (req, res) => {
-  const card = req.body;
+  const chat = req.body;
   try {
-    const newCard = await card.save();
-    res.status(201).json({newCard});
+    const newChat = await chat.save();
+    res.status(201).json({newChat});
   } catch (error) {
     res.status(400).json({message: error.message});
+    throw error;
   }
 });
 
@@ -52,22 +54,24 @@ app.get('/tinder/users', async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(500).json({message: error.message});
+    throw error;
   }
 });
 
 app.get('/tinder/chats', async (req, res) => {
   try {
-    const users = await Chats.find();
-    res.json(users);
+    const chats = await Chats.find();
+    res.json(chats);
   } catch (error) {
     res.status(500).json({message: error.message});
+    throw error;
   }
 });
 
-app.put('/tinder/users', (req, res) => {
-
-  },
-);
+// app.put('/tinder/users', (req, res) => {
+//
+//   },
+// );
 
 //Listener
 app.listen(port, () => {
