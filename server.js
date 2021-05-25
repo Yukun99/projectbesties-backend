@@ -30,10 +30,9 @@ app.post('/tinder/users', async (req, res) => {
   const user = req.body;
   try {
     const newUser = await Users.create(user);
-    res.status(201).json({newUser});
+    return res.status(201).send({newUser});
   } catch (error) {
-    res.status(400).json({message: error.message});
-    throw error;
+    return res.status(400).send({message: error.message});
   }
 });
 
@@ -41,30 +40,27 @@ app.post('/tinder/chats', async (req, res) => {
   const chat = req.body;
   try {
     const newChat = await Chats.create(chat);
-    res.status(201).json({newChat});
+    return res.status(201).send({newChat});
   } catch (error) {
-    res.status(400).json({message: error.message});
-    throw error;
+    return res.status(400).send({message: error.message});
   }
 });
 
 app.get('/tinder/users', async (req, res) => {
   try {
     const users = await Users.find();
-    res.json(users);
+    return res.send(users);
   } catch (error) {
-    res.status(500).json({message: error.message});
-    throw error;
+    return res.status(500).send({message: error.message});
   }
 });
 
 app.get('/tinder/chats', async (req, res) => {
   try {
     const chats = await Chats.find();
-    res.json(chats);
+    return res.send(chats);
   } catch (error) {
-    res.status(500).json({message: error.message});
-    throw error;
+    return res.status(500).send({message: error.message});
   }
 });
 
