@@ -8,7 +8,7 @@ import Chat from './models/Chat.js';
 const app = express();
 const port = process.env.PORT || 8001;
 const connection_url =
-    `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
+  `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
 
 //Middlewares
 app.use(express.json());
@@ -16,45 +16,59 @@ app.use(Cors());
 
 //DB Config
 mongoose.connect(connection_url, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
 });
 
 //API Endpoints
 app.get('/', (req, res) => {
-    res.status(200).send("Bruh");
+  res.status(200).send('Bruh');
 });
 
 app.post('/tinder/users', async (req, res) => {
-    const user = req.body;
+  const user = req.body;
 
-    try {
-        await User.create(user);
-        res.status(201).send(user);
-        console.log("test");
-    } catch (err) {
-        res.status(400).json({message: err.message});
-    }
-})
+  try {
+    await User.create(user);
+    res.status(201).send(user);
+    console.log('test');
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
+
+app.post('/tinder/chats', async (req, res) => {
+  const chat = req.body;
+
+  try {
+    await Chat.create(chat);
+    res.status(201).send(chat);
+    console.log('test');
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
 
 app.get('/tinder/users', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.send(users);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-    // User.find((err, data) => {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         res.status(200).send(data);
-    //     }
-    // });
-})
+  try {
+    const users = await User.find();
+    res.send(users);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+app.get('/tinder/chats', async (req, res) => {
+  try {
+    const chats = await Chat.find();
+    res.send(chats);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
 
 //Listener
 app.listen(port, () => {
-    console.log((`listening on localhost: ${port}.`))
-})
+  console.log((`listening on localhost: ${port}.`));
+});
