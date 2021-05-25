@@ -1,8 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Cors from 'cors';
-import Users from './models/Users.js';
-import Chats from './models/Chats';
+import User from './models/User.js';
+import Chat from './models/Chat';
 
 //App Config
 const app = express();
@@ -27,40 +27,48 @@ app.get('/', (req, res) => {
 });
 
 app.post('/tinder/users', async (req, res) => {
-  const user = req.body;
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    age: req.body.age,
+    year: req.body.year,
+    imgUrl: req.body.imgUrl,
+    projects: req.body.projects,
+    creationDate: req.body.creationDate,
+  })
   try {
-    const newUser = await Users.create(user);
-    return res.status(201).send({newUser});
+    let saveUser = await newUser.save();
+    res.status(201).send({newUser});
   } catch (error) {
-    return res.status(400).send({message: error.message});
+    res.status(400).send({message: error.message});
   }
 });
 
 app.post('/tinder/chats', async (req, res) => {
   const chat = req.body;
   try {
-    const newChat = await Chats.create(chat);
-    return res.status(201).send({newChat});
+    const newChat = await Chat.create(chat);
+    res.status(201).send({newChat});
   } catch (error) {
-    return res.status(400).send({message: error.message});
+    res.status(400).send({message: error.message});
   }
 });
 
 app.get('/tinder/users', async (req, res) => {
   try {
-    const users = await Users.find();
-    return res.send(users);
+    const users = await User.find();
+    res.send(users);
   } catch (error) {
-    return res.status(500).send({message: error.message});
+    res.status(500).send({message: error.message});
   }
 });
 
 app.get('/tinder/chats', async (req, res) => {
   try {
-    const chats = await Chats.find();
-    return res.send(chats);
+    const chats = await Chat.find();
+    res.send(chats);
   } catch (error) {
-    return res.status(500).send({message: error.message});
+    res.status(500).send({message: error.message});
   }
 });
 
