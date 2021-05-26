@@ -68,25 +68,23 @@ app.get('/tinder/chats', async (req, res) => {
   }
 });
 
-app.put('/tinder/users/:email', async (req, res) => {
+app.put('/tinder/users/:id', async (req, res) => {
   try {
-    const currUser = await User.findOne({email: req.body.email});
-    const schemaKeys = Object.keys(User.schema.paths);
-    const user = req.body;
-    const userKeys = Object.keys(user);
-    const userValues = Object.values(user);
-    for (let i = 0; i < userKeys.length; ++i) {
-      // safety check in case of bad key
-      if (schemaKeys.includes(userKeys[i])) {
-        currUser[userKeys[i]] = userValues[i];
-      }
-    }
+    // console.log('test');
+    // const currUser = await User.findById(req.body._id);
+    // const schemaKeys = Object.keys(User.schema.paths);
+    // const user = req.body;
+    // const userKeys = Object.keys(user);
+    // const userValues = Object.values(user);
+    // for (let i = 0; i < userKeys.length; ++i) {
+    //   // safety check in case of bad key
+    //   if (schemaKeys.includes(userKeys[i])) {
+    //     currUser[userKeys[i]] = userValues[i];
+    //   }
+    // }
 
-    const updatedUser = await User.updateOne(
-      {email: user.email},
-      {$set: currUser},
-    );
-    res.send(currUser);
+    const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body);
+    res.send(updatedUser);
   } catch (err) {
     res.status(400).send({message: err.message});
   }
