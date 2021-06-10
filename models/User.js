@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
         type: Array
     },
     testResults: {
-        type: Array
+        type: String
     },
     swiped: {
         type: Array
