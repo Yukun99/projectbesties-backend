@@ -77,6 +77,15 @@ app.put('/tinder/users/:id', async (req, res) => {
   }
 });
 
+app.put('/tinder/chats/:id', async (req, res) => {
+  try {
+    const updatedChat = await Chat.findByIdAndUpdate(req.body._id, req.body);
+    res.send(updatedChat);
+  } catch (err) {
+    res.status(400).send({message: err.message});
+  }
+});
+
 //Listener
 app.listen(port, () => {
   console.log((`listening on localhost: ${port}.`));
