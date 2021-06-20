@@ -3,9 +3,12 @@ import mongoose from 'mongoose';
 import Cors from 'cors';
 import User from './models/User.js';
 import Chat from './models/Chat.js';
+import {Server} from 'socket.io';
 
 //App Config
 const app = express();
+const server = require("http").createServer(app);
+const io = new Server(server);
 const port = process.env.PORT || 8001;
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
@@ -19,6 +22,63 @@ mongoose.connect(connection_url, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
+});
+
+//Socket Declarations
+let clients = [];
+
+io.on("connection", socket => {
+  console.log("New User Connected");
+  socket.on("storeClientInfo", function(data) {
+    console.log(data.customId + " Connected");
+    //store the new client
+    let clientInfo = new Object();
+    clientInfo.customId = data.customId;
+    clientInfo.clientId = socket.id;
+    clients.push(clientInfo);
+
+    //update the active status
+    const res = User.updateOne({ id: data.customId }, { isActive: true });
+    res.exec().then(() => {
+      console.log("Activated " + data.customId);
+
+      //Notify others
+      socket.broadcast.emit("update", "Updated");
+      console.log("emmited");
+    });
+  });
+
+  socket.on("disconnect", function(data) {
+    for (let i = 0, len = clients.length; i < len; ++i) {
+      let c = clients[i];
+
+      if (c.clientId == socket.id) {
+        //remove the client
+        clients.splice(i, 1);
+        console.log(c.customId + " Disconnected");
+
+        //update the active status
+        const res = User.updateOne({ id: c.customId }, { isActive: false });
+        res.exec().then(data => {
+          console.log("Deactivated " + c.customId);
+
+          //notify others
+          socket.broadcast.emit("update", "Updated");
+        });
+        break;
+      }
+    }
+  });
+});
+
+//Messages Socket
+const chatSocket = io.of("/tinder/chats");
+chatSocket.on("connection", function(socket) {
+  //On new message
+  socket.on("newMessage", data => {
+    //Notify the room
+    socket.broadcast.emit("incomingMessage", "reload");
+  });
 });
 
 //API Endpoints
