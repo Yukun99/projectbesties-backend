@@ -3,12 +3,13 @@ import mongoose from 'mongoose';
 import Cors from 'cors';
 import User from './models/User.js';
 import Chat from './models/Chat.js';
-import {Server} from 'socket.io';
+import SocketIO from 'socket.io';
+import Http from 'http';
 
 //App Config
 const app = express();
-const server = require("http").createServer(app);
-const io = new Server(server);
+const server = Http.Server(app);
+const io = SocketIO(server);
 const port = process.env.PORT || 8001;
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
@@ -25,60 +26,37 @@ mongoose.connect(connection_url, {
 });
 
 //Socket Declarations
-let clients = [];
+io.on('connection', (socket) => {
 
-io.on("connection", socket => {
-  console.log("New User Connected");
-  socket.on("storeClientInfo", function(data) {
-    console.log(data.customId + " Connected");
-    //store the new client
-    let clientInfo = new Object();
-    clientInfo.customId = data.customId;
-    clientInfo.clientId = socket.id;
-    clients.push(clientInfo);
+  // Get the last 10 messages from the database.
+  Chat.find().sort({createdAt: -1}).limit(10).exec((err, messages) => {
+    if (err) return console.error(err);
 
-    //update the active status
-    const res = User.updateOne({ id: data.customId }, { isActive: true });
-    res.exec().then(() => {
-      console.log("Activated " + data.customId);
-
-      //Notify others
-      socket.broadcast.emit("update", "Updated");
-      console.log("emmited");
-    });
+    // Send the last messages to the user.
+    socket.emit('init', messages);
   });
 
-  socket.on("disconnect", function(data) {
-    for (let i = 0, len = clients.length; i < len; ++i) {
-      let c = clients[i];
+  // Listen to connected users for a new message.
+  socket.on('message', (req) => {
+    // Create a message with the content and the name of the user.
+    const message = new Chat({
+      from: req.from,
+      to: req.to,
+      messages: req.messages,
+    });
 
-      if (c.clientId == socket.id) {
-        //remove the client
-        clients.splice(i, 1);
-        console.log(c.customId + " Disconnected");
+    // Save the message to the database.
+    message.save((err) => {
+      if (err) return console.error(err);
+    });
 
-        //update the active status
-        const res = User.updateOne({ id: c.customId }, { isActive: false });
-        res.exec().then(data => {
-          console.log("Deactivated " + c.customId);
-
-          //notify others
-          socket.broadcast.emit("update", "Updated");
-        });
-        break;
-      }
-    }
+    // Notify all other users about a new message.
+    socket.broadcast.emit('push', msg);
   });
 });
 
-//Messages Socket
-const chatSocket = io.of("/tinder/chats");
-chatSocket.on("connection", function(socket) {
-  //On new message
-  socket.on("newMessage", data => {
-    //Notify the room
-    socket.broadcast.emit("incomingMessage", "reload");
-  });
+server.listen(port, () => {
+  console.log('listening on *:' + port);
 });
 
 //API Endpoints
