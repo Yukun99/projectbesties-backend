@@ -8,8 +8,6 @@ import Http from 'http';
 
 //App Config
 const app = express();
-const server = Http.Server(app);
-const io = SocketIO(server);
 const port = process.env.PORT || 8001;
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
@@ -23,40 +21,6 @@ mongoose.connect(connection_url, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
-});
-
-//Socket Declarations
-io.on('connection', (socket) => {
-
-  // Get the last 10 messages from the database.
-  Chat.find().sort({createdAt: -1}).limit(10).exec((err, messages) => {
-    if (err) return console.error(err);
-
-    // Send the last messages to the user.
-    socket.emit('init', messages);
-  });
-
-  // Listen to connected users for a new message.
-  socket.on('message', (req) => {
-    // Create a message with the content and the name of the user.
-    const message = new Chat({
-      from: req.from,
-      to: req.to,
-      messages: req.messages,
-    });
-
-    // Save the message to the database.
-    message.save((err) => {
-      if (err) return console.error(err);
-    });
-
-    // Notify all other users about a new message.
-    socket.broadcast.emit('push', msg);
-  });
-});
-
-server.listen(port, () => {
-  console.log('listening on *:' + port);
 });
 
 //API Endpoints
