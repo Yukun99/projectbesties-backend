@@ -4,7 +4,7 @@ import Chat from '../models/Chat.js';
 const router = express.Router();
 
 // create new chat
-router.post('/tinder/chats', async (req, res) => {
+router.post('/', async (req, res) => {
   const chat = new Chat(req.body);
   try {
     console.log('Creating new chat...');
@@ -17,7 +17,7 @@ router.post('/tinder/chats', async (req, res) => {
 });
 
 // get all chat by single user ID
-router.get('/tinder/chats/:user', async (req, res) => {
+router.get('/:user', async (req, res) => {
   try {
     console.log('Fetching chats...');
     const chats = await Chat.find({
@@ -31,7 +31,7 @@ router.get('/tinder/chats/:user', async (req, res) => {
 });
 
 // get chat between two user IDs
-router.get('/tinder/chats/find/:first/:second', async (req, res) => {
+router.get('/find/:first/:second', async (req, res) => {
   try {
     console.log('Fetching chat...');
     const chat = await Chat.findOne({

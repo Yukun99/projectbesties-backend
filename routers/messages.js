@@ -4,7 +4,7 @@ import Message from '../models/Message.js';
 const router = express.Router();
 
 // create a new message
-router.post('/tinder/messages', async (req, res) => {
+router.post('/', async (req, res) => {
   const msg = new Message(req.body);
   try {
     console.log('Creating new message...');
@@ -17,7 +17,7 @@ router.post('/tinder/messages', async (req, res) => {
 });
 
 // get messages by chatId
-router.get('/tinder/messages/:chatID', async (req, res) => {
+router.get('/:chatID', async (req, res) => {
   try {
     console.log('Fetching messages...');
     const messages = await Message.find({

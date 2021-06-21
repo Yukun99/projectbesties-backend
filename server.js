@@ -28,9 +28,9 @@ app.get('/', (req, res) => {
   res.status(200).send('Bruh');
 });
 
-app.use('/api/users', UserRoute);
-app.use('/api/chats', ChatRoute);
-app.use('/api/messages', MessageRoute);
+app.use('/tinder/users', UserRoute);
+app.use('/tinder/chats', ChatRoute);
+app.use('/tinder/messages', MessageRoute);
 
 //Listener
 app.listen(port, () => {

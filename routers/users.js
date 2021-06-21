@@ -4,7 +4,7 @@ import User from '../models/User.js';
 const router = express.Router();
 
 // create new user
-router.post('/tinder/users', async (req, res) => {
+router.post('/', async (req, res) => {
   const user = new User(req.body);
   try {
     console.log('Creating new user...');
@@ -17,7 +17,7 @@ router.post('/tinder/users', async (req, res) => {
 });
 
 // fetch all users
-router.get('/tinder/users', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     console.log('Fetching users...');
     const users = await User.find();
@@ -29,7 +29,7 @@ router.get('/tinder/users', async (req, res) => {
 });
 
 // fetch user by email
-router.get('/tinder/users/:email', async (req, res) => {
+router.get('/:email', async (req, res) => {
   try {
     console.log('Fetching user...');
     const users = await User.find({
@@ -43,7 +43,7 @@ router.get('/tinder/users/:email', async (req, res) => {
 });
 
 // update user by id
-router.put('/tinder/users/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     console.log('Updating user...');
     const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body);
