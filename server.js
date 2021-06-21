@@ -3,8 +3,6 @@ import mongoose from 'mongoose';
 import Cors from 'cors';
 import User from './models/User.js';
 import Chat from './models/Chat.js';
-import SocketIO from 'socket.io';
-import Http from 'http';
 
 //App Config
 const app = express();
