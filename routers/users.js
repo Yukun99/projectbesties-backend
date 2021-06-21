@@ -32,11 +32,11 @@ router.get('/', async (req, res) => {
 router.get('/:email', async (req, res) => {
   try {
     console.log('Fetching user...');
-    const users = await User.findOne({
+    const user = await User.findOne({
       email: req.params.email,
     });
     console.log('Matching user found.');
-    res.status(201).json(users);
+    res.status(201).send(user);
   } catch (err) {
     res.status(500).json(err.message);
   }
