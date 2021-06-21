@@ -16,8 +16,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// get all chat by single user ID
-router.get('/:user', async (req, res) => {
+// get all chat by single user email
+router.get('/find/:user', async (req, res) => {
   try {
     console.log('Fetching chats...');
     const chats = await Chat.find({
@@ -30,7 +30,7 @@ router.get('/:user', async (req, res) => {
   }
 });
 
-// get chat between two user IDs
+// get chat between two user emails
 router.get('/find/:first/:second', async (req, res) => {
   try {
     console.log('Fetching chat...');
