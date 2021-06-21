@@ -2,41 +2,38 @@ import mongoose from 'mongoose';
 
 const userSchema = mongoose.Schema({
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     age: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     year: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     imgUrl: String,
-    creationDate: {
-        type: Date,
-        required: true
-    },
     projects: {
-        type: Array
+      type: Array,
     },
     posts: {
-        type: Array
+      type: Array,
     },
     testResults: {
-        type: String
+      type: String,
     },
     swiped: {
-        type: Array
+      type: Array,
     },
     matches: {
-        type: Array
-    }
-});
+      type: Array,
+    },
+  },
+  {timestamps: true});
 
 export default mongoose.model('users', userSchema);
