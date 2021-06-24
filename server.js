@@ -4,6 +4,7 @@ import Cors from 'cors';
 import UserRoute from './routers/users.js';
 import ChatRoute from './routers/chats.js';
 import MessageRoute from './routers/messages.js';
+import {Server} from 'socket.io';
 
 //App Config
 const app = express();
@@ -33,6 +34,51 @@ app.use('/tinder/chats', ChatRoute);
 app.use('/tinder/messages', MessageRoute);
 
 //Listener
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log((`listening on localhost: ${port}.`));
+});
+
+let users = [];
+
+function addUser(userId, socketId) {
+  if (!users.some(user => user.userId === userId)) {
+    users.push({userId, socketId});
+  }
+}
+
+function removeUser(socketId) {
+  users = users.filter(user => user.socketId !== socketId);
+}
+
+function getUser(userId) {
+  return users.find(user => user.userId === userId);
+}
+
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+  // User connection
+  console.log('A user has connected.');
+
+  // Receive new User ID and store it
+  socket.on('newUser', userId => {
+    addUser(userId, socket.id);
+    io.emit('getUsers', users);
+  });
+
+  // Receive sent messages
+  socket.on('newMessage', ({senderId, recipientId, message}) => {
+    const recipient = getUser(recipientId);
+    io.to(recipient.socketId).emit('getMessage', {
+      senderId,
+      message,
+    });
+  });
+
+  // User disconnecting
+  socket.on('disconnect', () => {
+    console.log('Man down');
+    removeUser(socket.id);
+    io.emit('getUsers', users);
+  });
 });
