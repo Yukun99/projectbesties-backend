@@ -4,11 +4,13 @@ import Cors from 'cors';
 import UserRoute from './routers/users.js';
 import ChatRoute from './routers/chats.js';
 import MessageRoute from './routers/messages.js';
+import {createServer} from 'http';
 import {Server} from 'socket.io';
 
 //App Config
 export const app = express();
-const port = process.env.PORT || 8001;
+const port = process.env.PORT || 8080;
+const http = createServer(app);
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
 
@@ -34,10 +36,13 @@ app.use('/tinder/chats', ChatRoute);
 app.use('/tinder/messages', MessageRoute);
 
 //Listener
-const server = app.listen(port, () => {
+// const server = app.listen(port, () => {
+//   console.log((`listening on localhost: ${port}.`));
+// });
+http.listen(port, () => {
   console.log((`listening on localhost: ${port}.`));
 });
-const io = new Server(server);
+const io = new Server(http);
 
 let users = [];
 
