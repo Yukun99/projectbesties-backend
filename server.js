@@ -7,7 +7,7 @@ import MessageRoute from './routers/messages.js';
 import {Server} from 'socket.io';
 
 //App Config
-const app = express();
+export const app = express();
 const port = process.env.PORT || 8001;
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
@@ -37,48 +37,48 @@ app.use('/tinder/messages', MessageRoute);
 const server = app.listen(port, () => {
   console.log((`listening on localhost: ${port}.`));
 });
-
-let users = [];
-
-function addUser(userId, socketId) {
-  if (!users.some(user => user.userId === userId)) {
-    users.push({userId, socketId});
-  }
-}
-
-function removeUser(socketId) {
-  users = users.filter(user => user.socketId !== socketId);
-}
-
-function getUser(userId) {
-  return users.find(user => user.userId === userId);
-}
-
 const io = new Server(server);
+app.set("io", io);
 
-io.on('connection', (socket) => {
-  // User connection
-  console.log('A user has connected.');
-
-  // Receive new User ID and store it
-  socket.on('newUser', userId => {
-    addUser(userId, socket.id);
-    io.emit('getUsers', users);
-  });
-
-  // Receive sent messages
-  socket.on('newMessage', ({senderId, recipientId, message}) => {
-    const recipient = getUser(recipientId);
-    io.to(recipient.socketId).emit('getMessage', {
-      senderId,
-      message,
-    });
-  });
-
-  // User disconnecting
-  socket.on('disconnect', () => {
-    console.log('Man down');
-    removeUser(socket.id);
-    io.emit('getUsers', users);
-  });
-});
+// let users = [];
+//
+// function addUser(userId, socketId) {
+//   if (!users.some(user => user.userId === userId)) {
+//     users.push({userId, socketId});
+//   }
+// }
+//
+// function removeUser(socketId) {
+//   users = users.filter(user => user.socketId !== socketId);
+// }
+//
+// function getUser(userId) {
+//   return users.find(user => user.userId === userId);
+// }
+//
+// io.on('connection', (socket) => {
+//   // User connection
+//   console.log('A user has connected.');
+//
+//   // Receive new User ID and store it
+//   socket.on('newUser', userId => {
+//     addUser(userId, socket.id);
+//     io.emit('getUsers', users);
+//   });
+//
+//   // Receive sent messages
+//   socket.on('newMessage', ({senderId, recipientId, message}) => {
+//     const recipient = getUser(recipientId);
+//     io.to(recipient.socketId).emit('getMessage', {
+//       senderId,
+//       message,
+//     });
+//   });
+//
+//   // User disconnecting
+//   socket.on('disconnect', () => {
+//     console.log('Man down');
+//     removeUser(socket.id);
+//     io.emit('getUsers', users);
+//   });
+// });
