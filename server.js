@@ -9,9 +9,10 @@ import {Server} from 'socket.io';
 
 //App Config
 export const app = express();
-const port = process.env.PORT || 8080;
-const http = createServer(app);
+const port = process.env.PORT || 8001;
+const httpServer = createServer(app);
 const connection_url =
+  // 'http://localhost';
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
 
 //Middlewares
@@ -36,13 +37,14 @@ app.use('/tinder/chats', ChatRoute);
 app.use('/tinder/messages', MessageRoute);
 
 //Listener
-// const server = app.listen(port, () => {
-//   console.log((`listening on localhost: ${port}.`));
-// });
-http.listen(port, () => {
+const server = app.listen(port, () => {
   console.log((`listening on localhost: ${port}.`));
 });
-const io = new Server(http);
+// httpServer.listen(port, () => {
+//   console.log((`listening on localhost: ${port}.`));
+// });
+const io = new Server(server);
+console.log(io);
 
 let users = [];
 
@@ -64,25 +66,27 @@ io.on('connection', (socket) => {
   // User connection
   console.log('A user has connected.');
 
-  // Receive new User ID and store it
-  socket.on('newUser', userId => {
-    addUser(userId, socket.id);
-    io.emit('getUsers', users);
-  });
-
-  // Receive sent messages
-  socket.on('newMessage', ({senderId, recipientId, message}) => {
-    const recipient = getUser(recipientId);
-    io.to(recipient.socketId).emit('getMessage', {
-      senderId,
-      message,
-    });
-  });
-
-  // User disconnecting
-  socket.on('disconnect', () => {
-    console.log('Man down');
-    removeUser(socket.id);
-    io.emit('getUsers', users);
-  });
+  socket.emit('example', {hello: 'world'});
+  //
+  // // Receive new User ID and store it
+  // socket.on('newUser', userId => {
+  //   addUser(userId, socket.id);
+  //   io.emit('getUsers', users);
+  // });
+  //
+  // // Receive sent messages
+  // socket.on('newMessage', ({senderId, recipientId, message}) => {
+  //   const recipient = getUser(recipientId);
+  //   io.to(recipient.socketId).emit('getMessage', {
+  //     senderId,
+  //     message,
+  //   });
+  // });
+  //
+  // // User disconnecting
+  // socket.on('disconnect', () => {
+  //   console.log('Man down');
+  //   removeUser(socket.id);
+  //   io.emit('getUsers', users);
+  // });
 });
