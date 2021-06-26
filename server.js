@@ -70,9 +70,11 @@ io.on('connection', (socket) => {
   // Receive sent messages
   socket.on('newMessage', ({recipientId, message}) => {
     const recipient = getUser(recipientId);
-    io.to(recipient.socketId).emit('newMessage', {
-      message,
-    });
+    if (recipient) {
+      io.to(recipient.socketId).emit('newMessage', {
+        message,
+      });
+    }
   });
 
   // User disconnecting
