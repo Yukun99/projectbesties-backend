@@ -4,12 +4,10 @@ import Cors from 'cors';
 import UserRoute from './routers/users.js';
 import ChatRoute from './routers/chats.js';
 import MessageRoute from './routers/messages.js';
-import {createServer} from 'http';
 import {Server} from 'socket.io';
 
 //App Config
 export const app = express();
-const httpServer = createServer();
 const port = process.env.PORT || 8001;
 const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
@@ -41,7 +39,7 @@ const server = app.listen(port, () => {
 });
 
 // SocketIO socket. Turns out an express server is just an http server.
-const io = new Server(app);
+const io = new Server(server);
 
 let users = [];
 
