@@ -62,13 +62,14 @@ io.on('connection', (socket) => {
   console.log('A user has connected with socket ID: ' + socket.id);
 
   // Receive new User ID and store it
-  socket.on('addUser', userID => {
+  socket.on('addUser', ({userID}) => {
     addUser(userID, socket.id);
     console.log('A user has been added with user ID: ' + userID);
   });
 
   // Receive sent messages
   socket.on('newMessage', ({recipientId, message}) => {
+    console.log('Sending message to recipient with recipientId: ' + recipientId);
     const recipient = getUser(recipientId);
     if (recipient) {
       io.to(recipient.socketId).emit('newMessage', {
