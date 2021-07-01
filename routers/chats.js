@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// get all chat by single user email
+// get all chats by single user email
 router.get('/find/:user', async (req, res) => {
   try {
     console.log('Fetching chats...');
@@ -39,6 +39,20 @@ router.get('/find/:first/:second', async (req, res) => {
     });
     console.log('Matching chat found.');
     res.status(200).json(chat);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// delete all chats by single user email
+router.delete('/find/:user', async (req, res) => {
+  try {
+    console.log('Deleting chats...');
+    const deleted = await Chat.deleteMany({
+      members: {$in: [req.params.user]},
+    });
+    console.log('Matching chats deleted.');
+    res.status(203).json(deleted);
   } catch (err) {
     res.status(500).json(err);
   }

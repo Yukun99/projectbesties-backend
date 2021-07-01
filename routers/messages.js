@@ -30,4 +30,18 @@ router.get('/:chatID', async (req, res) => {
   }
 });
 
+// delete messages by chatId
+router.delete('/:chatID', async (req, res) => {
+  try {
+    console.log('Fetching messages...');
+    const deleted = await Message.deleteMany({
+      chatID: req.params.chatID,
+    });
+    console.log('Matching messages deleted.');
+    res.status(203).json(deleted);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 export default router;

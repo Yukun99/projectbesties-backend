@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     console.log('Fetching users...');
     const users = await User.find();
     console.log('All users fetched.');
-    res.status(201).json(users);
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -36,7 +36,7 @@ router.get('/:email', async (req, res) => {
       email: req.params.email,
     });
     console.log('Matching user found.');
-    res.status(201).send(user);
+    res.status(200).send(user);
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -48,7 +48,7 @@ router.put('/:id', async (req, res) => {
     console.log('Updating user...');
     const updatedUser = await User.findByIdAndUpdate(req.body._id, req.body);
     console.log('User updated.');
-    res.status(204).json(updatedUser);
+    res.status(202).json(updatedUser);
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -62,7 +62,7 @@ router.delete('/:email', async (req, res) => {
       email: req.params.email,
     });
     console.log('Matching user deleted.');
-    res.status(201).send(deleted);
+    res.status(203).send(deleted);
   } catch (err) {
     res.status(500).send(err.message);
   }
