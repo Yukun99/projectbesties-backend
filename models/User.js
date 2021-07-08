@@ -18,10 +18,8 @@ const userSchema = mongoose.Schema({
       required: true,
     },
     imgUrl: String,
+    linkedInUrl: String,
     projects: {
-      type: Array,
-    },
-    posts: {
       type: Array,
     },
     testResults: {
