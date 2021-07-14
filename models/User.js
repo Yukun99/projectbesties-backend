@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
       type: Number,
       required: true,
     },
-    imgUrl: String,
+    imgBase64: String,
     linkedInUrl: String,
     projects: {
       type: Array,
