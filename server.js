@@ -6,7 +6,6 @@ import ChatRoute from './routers/chats.js';
 import MessageRoute from './routers/messages.js';
 import {Server} from 'socket.io';
 
-
 //App Config
 export const app = express();
 const port = process.env.PORT || 8001;
@@ -14,7 +13,7 @@ const connection_url =
   `mongodb+srv://xu_yukun:Xx5iTj7hyXv!wMM@projectbesties.sytxr.mongodb.net/tinderShitBack?retryWrites=true&w=majority`;
 
 //Middlewares
-app.use(express.json());
+app.use(express.json({limit: '100mb'}));
 app.use(Cors());
 
 //DB Config
