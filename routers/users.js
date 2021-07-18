@@ -42,6 +42,20 @@ router.get('/:email', async (req, res) => {
   }
 });
 
+// fetch user by id
+router.get('/find/:id', async (req, res) => {
+  try {
+    console.log('Fetching user...');
+    const user = await User.findOne({
+      _id: req.params._id
+    });
+    console.log('Matching user found.');
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
 // update user by id
 router.put('/:id', async (req, res) => {
   try {
