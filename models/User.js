@@ -31,6 +31,10 @@ const userSchema = mongoose.Schema({
     matches: {
       type: Array,
     },
+    confirmed: {
+      type: Boolean,
+      required: true,
+    },
   },
   {timestamps: true});
 
