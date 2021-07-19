@@ -46,7 +46,7 @@ router.get('/:email', async (req, res) => {
 router.get('/find/:id', async (req, res) => {
   try {
     console.log('Fetching user...');
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.params.id);
     console.log('Matching user found.');
     res.status(200).send(user);
   } catch (err) {
