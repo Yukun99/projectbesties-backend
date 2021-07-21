@@ -19,22 +19,15 @@ const userSchema = mongoose.Schema({
     },
     imgBase64: String,
     linkedInUrl: String,
-    projects: {
-      type: Array,
-    },
-    testResults: {
-      type: String,
-    },
-    swiped: {
-      type: Array,
-    },
-    matches: {
-      type: Array,
-    },
+    projects: Array,
+    testResults: String,
+    swiped: Array,
+    matches: Array,
     confirmed: {
       type: Boolean,
       required: true,
     },
+    scores: Array,
   },
   {timestamps: true});
 
