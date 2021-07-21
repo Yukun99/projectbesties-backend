@@ -70,9 +70,24 @@ router.put('/:id', async (req, res) => {
 router.delete('/:email', async (req, res) => {
   try {
     console.log('Deleting user...');
-    const deleted = await User.deleteOne({
+    // const deleted = await User.deleteOne({
+    //   email: req.params.email,
+    // });
+    const deleted = await User.findOneAndUpdate({
       email: req.params.email,
-    });
+    }, {
+      name: 'null',
+      age: -1,
+      year: -1,
+      imgBase64: undefined,
+      linkedInUrl: undefined,
+      projects: undefined,
+      testResults: undefined,
+      scores: undefined,
+      swiped: undefined,
+      matches: undefined,
+      deleted: true,
+    })
     console.log('Matching user deleted.');
     res.status(203).send(deleted);
   } catch (err) {

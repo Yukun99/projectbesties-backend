@@ -28,6 +28,7 @@ const userSchema = mongoose.Schema({
       required: true,
     },
     scores: Array,
+    deleted: Boolean,
   },
   {timestamps: true});
 
