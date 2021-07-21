@@ -67,6 +67,20 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete user by email
+router.delete('/delete/:email', async (req, res) => {
+  try {
+    console.log('Deleting user...');
+    const deleted = await User.deleteOne({
+      email: req.params.email,
+    });
+    console.log('Matching user deleted.');
+    res.status(203).send(deleted);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+})
+
+// mark user as deleted by email
 router.delete('/:email', async (req, res) => {
   try {
     console.log('Deleting user...');
