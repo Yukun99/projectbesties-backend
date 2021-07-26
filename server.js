@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
 
   // Receive sent messages
   socket.on('newMessage', ({recipientId, message}) => {
-    console.log('Sending message to recipient with recipientId: ' + recipientId);
+    console.log('Sending message to recipient with recipientId: ' + recipientId + ' and contents ' + message);
     const recipient = getUser(recipientId);
     if (recipient) {
       io.to(recipient.socketId).emit('newMessage', {
